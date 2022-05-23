@@ -15,5 +15,4 @@ In it's current state there is unfortuneatly not an easy way to install, althoug
 - Video importing/ exporting
 - Export as .txt file
 - User templates for how to format code (for quicker implementation into projects)
-- Nearest neighbour interpolation when loading image
-- 
+- Nearest neighbour interpolation when loading image (for the aesthetics)
