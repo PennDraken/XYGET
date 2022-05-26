@@ -1,4 +1,5 @@
 using System.Drawing;
+using System.Text;
 
 namespace XYGetAlpha
 {
@@ -7,8 +8,8 @@ namespace XYGetAlpha
         static double brightnessThreshold = 0.5;
         public static Boolean highpass = false; // if highpass is false only accept pixels below threshold
         //progress bar
-        public static int progress;
-        public static int total;
+        public static int pixelsProcessedInImage;
+        public static int totalPixelsInImage;
 
 
         /// <summary>
@@ -21,49 +22,62 @@ namespace XYGetAlpha
         {
             ApplicationConfiguration.Initialize();
             Application.Run(new Form1());
-            // C:/Users/henry/OneDrive/Skrivbord/test.png
         }
 
-        public static List<Coord> GetCoordinates(string filepath)
+        public static Bitmap GetBitmapFromFilepath(string filepath)
         {
-            // Bitmap img = new("C:/Users/henry/OneDrive/Skrivbord/test.png");
             Bitmap img = new(filepath);
-            total = img.Width * img.Height;
-            List<Coord> coordinateList = new List<Coord>();
+            int imgWidth = img.Width;
+            int imgHeight = img.Height;
+            totalPixelsInImage = imgWidth * imgHeight;
+            return img;
+        }
+
+        public static StringBuilder GetCoordinatesOfImage(Bitmap img)
+        {
+            // init
+            StringBuilder coordinatesOutputSB = new StringBuilder();
+
+            // processing
+            if (highpass)
+                getHighpassedCoordinates(img, coordinatesOutputSB);
+            else
+                getLowpassedCoordinates(img, coordinatesOutputSB);
+
+            // finished
+            pixelsProcessedInImage = 0;
+            return coordinatesOutputSB;
+        }
+
+        private static void getLowpassedCoordinates(Bitmap img, StringBuilder coordinatesOutputSB)
+        {
+            for (int i = 0; i < img.Width; i++)
+            {
+                for (int j = 0; j < img.Height; j++)
+                {
+                    if (img.GetPixel(i, j).GetBrightness() <= brightnessThreshold) // lowpass
+                    {
+                        coordinatesOutputSB.Append("{" + i + "," + j + "}");
+                    }
+                    pixelsProcessedInImage++;
+                }
+            }
+        }
+
+        private static void getHighpassedCoordinates(Bitmap img, StringBuilder coordinatesOutputSB)
+        {
             for (int i = 0; i < img.Width; i++)
             {
                 for (int j = 0; j < img.Height; j++)
                 {
                     Color pixel = img.GetPixel(i, j);
-                    if (highpass && pixel.GetBrightness() > brightnessThreshold ||
-                        !highpass && pixel.GetBrightness() < brightnessThreshold)
+                    if (pixel.GetBrightness() >= brightnessThreshold) // highpass
                     {
-                        coordinateList.Add(new Coord(i, j));
+                        coordinatesOutputSB.Append("{" + i + "," + j + "}");
                     }
-                    // increment progress
-                    progress++;
+                    pixelsProcessedInImage++;
                 }
             }
-
-            progress = 0;
-            return coordinateList;
-        }
-    }
-
-    internal class Coord
-    {
-        // coordinate object (used to save coordinates of desired pixels)
-        int x;
-        int y;
-        public Coord(int x, int y)
-        {
-            this.x = x;
-            this.y = y;
-        }
-
-        public override String ToString()
-        {
-            return ("{" + x + "," + y + "},");
         }
     }
 }

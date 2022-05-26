@@ -30,13 +30,12 @@
         {
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.outputBox = new System.Windows.Forms.TextBox();
+            this.outputBoxContainingCoords = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.buttonGetCoordinates = new System.Windows.Forms.Button();
+            this.buttonOpenFileDialog = new System.Windows.Forms.Button();
+            this.buttonCopyToClipboard = new System.Windows.Forms.Button();
+            this.pictureBoxPreview = new System.Windows.Forms.PictureBox();
             this.pictureBoxLogo = new System.Windows.Forms.PictureBox();
             this.label3 = new System.Windows.Forms.Label();
             this.labelColorFilter = new System.Windows.Forms.Label();
@@ -45,7 +44,8 @@
             this.buttonMinimizeWindow = new System.Windows.Forms.Button();
             this.line = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.progressBar = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -57,7 +57,7 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(360, 31);
             this.textBox1.TabIndex = 0;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.textBox1.TextChanged += new System.EventHandler(this.textBoxWithFilePath);
             // 
             // label1
             // 
@@ -70,23 +70,18 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "File path to image:";
             // 
-            // openFileDialog1
+            // outputBoxContainingCoords
             // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            // 
-            // outputBox
-            // 
-            this.outputBox.BackColor = System.Drawing.Color.Black;
-            this.outputBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.outputBox.Font = new System.Drawing.Font("Cascadia Code", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.outputBox.ForeColor = System.Drawing.Color.White;
-            this.outputBox.Location = new System.Drawing.Point(591, 185);
-            this.outputBox.Multiline = true;
-            this.outputBox.Name = "outputBox";
-            this.outputBox.ReadOnly = true;
-            this.outputBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.outputBox.Size = new System.Drawing.Size(451, 547);
-            this.outputBox.TabIndex = 2;
+            this.outputBoxContainingCoords.BackColor = System.Drawing.Color.Black;
+            this.outputBoxContainingCoords.Font = new System.Drawing.Font("Cascadia Code", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.outputBoxContainingCoords.ForeColor = System.Drawing.Color.White;
+            this.outputBoxContainingCoords.Location = new System.Drawing.Point(591, 184);
+            this.outputBoxContainingCoords.MaxLength = 10000;
+            this.outputBoxContainingCoords.Multiline = true;
+            this.outputBoxContainingCoords.Name = "outputBoxContainingCoords";
+            this.outputBoxContainingCoords.ReadOnly = true;
+            this.outputBoxContainingCoords.Size = new System.Drawing.Size(451, 547);
+            this.outputBoxContainingCoords.TabIndex = 2;
             // 
             // label2
             // 
@@ -99,59 +94,59 @@
             this.label2.TabIndex = 3;
             this.label2.Text = "Generated coordinates:";
             // 
-            // button1
+            // buttonGetCoordinates
             // 
-            this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(463, 138);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 31);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "Load";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            this.buttonGetCoordinates.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonGetCoordinates.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.buttonGetCoordinates.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonGetCoordinates.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.buttonGetCoordinates.ForeColor = System.Drawing.Color.White;
+            this.buttonGetCoordinates.Location = new System.Drawing.Point(463, 138);
+            this.buttonGetCoordinates.Name = "buttonGetCoordinates";
+            this.buttonGetCoordinates.Size = new System.Drawing.Size(75, 31);
+            this.buttonGetCoordinates.TabIndex = 4;
+            this.buttonGetCoordinates.Text = "Load";
+            this.buttonGetCoordinates.UseVisualStyleBackColor = true;
+            this.buttonGetCoordinates.Click += new System.EventHandler(this.buttonGetCoordinates_Click);
             // 
-            // button2
+            // buttonOpenFileDialog
             // 
-            this.button2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button2.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button2.ForeColor = System.Drawing.Color.White;
-            this.button2.Location = new System.Drawing.Point(14, 138);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(77, 31);
-            this.button2.TabIndex = 5;
-            this.button2.Text = "Select";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.buttonOpenFileDialog.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonOpenFileDialog.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.buttonOpenFileDialog.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonOpenFileDialog.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.buttonOpenFileDialog.ForeColor = System.Drawing.Color.White;
+            this.buttonOpenFileDialog.Location = new System.Drawing.Point(14, 138);
+            this.buttonOpenFileDialog.Name = "buttonOpenFileDialog";
+            this.buttonOpenFileDialog.Size = new System.Drawing.Size(77, 31);
+            this.buttonOpenFileDialog.TabIndex = 5;
+            this.buttonOpenFileDialog.Text = "Select";
+            this.buttonOpenFileDialog.UseVisualStyleBackColor = true;
+            this.buttonOpenFileDialog.Click += new System.EventHandler(this.buttonOpenFileWindow_Click);
             // 
-            // button3
+            // buttonCopyToClipboard
             // 
-            this.button3.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button3.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button3.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button3.ForeColor = System.Drawing.Color.White;
-            this.button3.Location = new System.Drawing.Point(591, 138);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(451, 31);
-            this.button3.TabIndex = 6;
-            this.button3.Text = "Copy to clipboard";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.buttonCopyToClipboard.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonCopyToClipboard.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.buttonCopyToClipboard.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonCopyToClipboard.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.buttonCopyToClipboard.ForeColor = System.Drawing.Color.White;
+            this.buttonCopyToClipboard.Location = new System.Drawing.Point(591, 138);
+            this.buttonCopyToClipboard.Name = "buttonCopyToClipboard";
+            this.buttonCopyToClipboard.Size = new System.Drawing.Size(451, 31);
+            this.buttonCopyToClipboard.TabIndex = 6;
+            this.buttonCopyToClipboard.Text = "Copy to clipboard";
+            this.buttonCopyToClipboard.UseVisualStyleBackColor = true;
+            this.buttonCopyToClipboard.Click += new System.EventHandler(this.buttonCopyToClipboard_Click);
             // 
-            // pictureBox1
+            // pictureBoxPreview
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(14, 222);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(524, 510);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 7;
-            this.pictureBox1.TabStop = false;
+            this.pictureBoxPreview.Location = new System.Drawing.Point(14, 235);
+            this.pictureBoxPreview.Name = "pictureBoxPreview";
+            this.pictureBoxPreview.Size = new System.Drawing.Size(524, 510);
+            this.pictureBoxPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxPreview.TabIndex = 7;
+            this.pictureBoxPreview.TabStop = false;
             // 
             // pictureBoxLogo
             // 
@@ -193,11 +188,11 @@
             this.comboBoxColorSelect.ForeColor = System.Drawing.Color.White;
             this.comboBoxColorSelect.FormattingEnabled = true;
             this.comboBoxColorSelect.Items.AddRange(new object[] {
-            "Black",
-            "White"});
+            "Dark",
+            "Bright"});
             this.comboBoxColorSelect.Location = new System.Drawing.Point(174, 187);
             this.comboBoxColorSelect.Name = "comboBoxColorSelect";
-            this.comboBoxColorSelect.Size = new System.Drawing.Size(364, 29);
+            this.comboBoxColorSelect.Size = new System.Drawing.Size(163, 29);
             this.comboBoxColorSelect.TabIndex = 12;
             this.comboBoxColorSelect.SelectedIndexChanged += new System.EventHandler(this.comboBoxColorSelect_SelectedIndexChanged);
             // 
@@ -214,7 +209,7 @@
             this.buttonCloseWindow.TabIndex = 13;
             this.buttonCloseWindow.Text = "X";
             this.buttonCloseWindow.UseVisualStyleBackColor = true;
-            this.buttonCloseWindow.Click += new System.EventHandler(this.button4_Click);
+            this.buttonCloseWindow.Click += new System.EventHandler(this.buttonClose_Click);
             // 
             // buttonMinimizeWindow
             // 
@@ -229,7 +224,7 @@
             this.buttonMinimizeWindow.TabIndex = 14;
             this.buttonMinimizeWindow.Text = "---";
             this.buttonMinimizeWindow.UseVisualStyleBackColor = true;
-            this.buttonMinimizeWindow.Click += new System.EventHandler(this.button5_Click);
+            this.buttonMinimizeWindow.Click += new System.EventHandler(this.buttonMinimize_Click);
             // 
             // line
             // 
@@ -249,6 +244,14 @@
             this.label4.TabIndex = 16;
             this.label4.Text = "label4";
             // 
+            // progressBar
+            // 
+            this.progressBar.BackColor = System.Drawing.Color.DimGray;
+            this.progressBar.Location = new System.Drawing.Point(194, 59);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(0, 30);
+            this.progressBar.TabIndex = 18;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
@@ -256,6 +259,7 @@
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(1054, 789);
             this.ControlBox = false;
+            this.Controls.Add(this.progressBar);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.line);
             this.Controls.Add(this.buttonMinimizeWindow);
@@ -264,12 +268,12 @@
             this.Controls.Add(this.labelColorFilter);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.pictureBoxLogo);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.pictureBoxPreview);
+            this.Controls.Add(this.buttonCopyToClipboard);
+            this.Controls.Add(this.buttonOpenFileDialog);
+            this.Controls.Add(this.buttonGetCoordinates);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.outputBox);
+            this.Controls.Add(this.outputBoxContainingCoords);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -277,7 +281,7 @@
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "XYGET";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -288,13 +292,12 @@
 
         private TextBox textBox1;
         private Label label1;
-        private OpenFileDialog openFileDialog1;
-        private TextBox outputBox;
+        private TextBox outputBoxContainingCoords;
         private Label label2;
-        private Button button1;
-        private Button button2;
-        private Button button3;
-        private PictureBox pictureBox1;
+        private Button buttonGetCoordinates;
+        private Button buttonOpenFileDialog;
+        private Button buttonCopyToClipboard;
+        private PictureBox pictureBoxPreview;
         private PictureBox pictureBoxLogo;
         private Label label3;
         private Label labelColorFilter;
@@ -303,6 +306,7 @@
         private Button buttonMinimizeWindow;
         private Label line;
         private Label label4;
+        private Label progressBar;
     }
 
 }

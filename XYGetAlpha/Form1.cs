@@ -1,40 +1,50 @@
+using System.Text;
+
 namespace XYGetAlpha
 {
     public partial class Form1 : Form
     {
         public string filePath;
-        private static System.Windows.Forms.Timer timer1 = new System.Windows.Forms.Timer();
+        public StringBuilder formattedOutputCoords = new StringBuilder();
+        int progressBarMaxWidth = 848;
 
         public Form1()
         {
             InitializeComponent();
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void textBoxWithFilePath(object sender, EventArgs e)
         {
             // when textbox changes
             filePath = textBox1.Text;
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private async void buttonGetCoordinates_Click(object sender, EventArgs e)
         {
             // starts conversion of file to coordinates
             System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor;
-            // get all coordinates
-            List<Coord> coordList = Program.GetCoordinates(filePath);
-            // add it to a string
-            string coordListString = "";
-            foreach (Coord coord in coordList)
+            // get all coordinates to a string
+            Bitmap img = Program.GetBitmapFromFilepath(filePath);
+            Task task1 = new Task(() => formattedOutputCoords = Program.GetCoordinatesOfImage(img));
+            task1.Start();
+
+            while (!task1.IsCompleted)
             {
-                coordListString += coord.ToString();
+                // doesn't show updates
+                progressBar.Width = Program.pixelsProcessedInImage / Program.totalPixelsInImage * progressBarMaxWidth;
             }
 
             // print string on outputTextBox
-            outputBox.Text = coordListString;
-            pictureBox1.Image = Image.FromFile(filePath);
+            if (formattedOutputCoords.Length > outputBoxContainingCoords.MaxLength)
+                outputBoxContainingCoords.Text = formattedOutputCoords.ToString().Substring(0, outputBoxContainingCoords.MaxLength);
+            else
+                outputBoxContainingCoords.Text = formattedOutputCoords.ToString();
+
+            progressBar.Width = 0;
+            pictureBoxPreview.Image = Image.FromFile(filePath);
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void buttonOpenFileWindow_Click(object sender, EventArgs e)
         {
             // opens explorer to find file
             int size = -1;
@@ -51,22 +61,22 @@ namespace XYGetAlpha
                 }
                 catch (IOException)
                 {
-                    // tell user invalid search path
+                    MessageBox.Show("Error: Likely invalid search path.");
                 }
             }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void buttonCopyToClipboard_Click(object sender, EventArgs e)
         {
             // sets clipboard to desired coordinates
-            Clipboard.SetText(outputBox.Text);
+            Clipboard.SetText(formattedOutputCoords.ToString());
             MessageBox.Show("Coordinates copied to clipboard.");
         }
 
         private void comboBoxColorSelect_SelectedIndexChanged(object sender, EventArgs e)
         {
             // color filter select
-            if (comboBoxColorSelect.SelectedIndex == 0) // 0 is black 1 is white
+            if (comboBoxColorSelect.SelectedIndex == 0) // 0 is dark, 1 is bright
             {
                 Program.highpass = false;
             } else
@@ -76,12 +86,12 @@ namespace XYGetAlpha
         }
 
 
-        private void button4_Click(object sender, EventArgs e)
+        private void buttonClose_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void buttonMinimize_Click(object sender, EventArgs e)
         {
             WindowState = FormWindowState.Minimized;
         }
