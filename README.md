@@ -5,7 +5,7 @@
 XYGET is a simple program written in C# which is made to get the coordinates of all black/ white pixels of an image. It was made because I couldn't find any similar programs.
 
 ## How to install
-Installation is simple! Download and run the .exe file attached in the "Downloads" section of the repository.
+Installation is simple! Download and run the .exe file attached in the "Releases" section of the repository.
 
 ## Known bugs
 - Progress bar not working
