@@ -7,10 +7,6 @@ XYGET is a simple program written in C# which is made to get the coordinates of 
 ## How to install
 Installation is simple! Download and run the .exe file attached in the "Releases" section of the repository.
 
-## Known bugs
-- Progress bar not working
-- Slow conversion on really big files
-
 ## Planned features
 - Video importing/ exporting
 - Export as .txt file
